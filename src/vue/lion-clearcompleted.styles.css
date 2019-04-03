@@ -51,3 +51,27 @@
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
 }
+
+.lion {
+  background-color:#41b883;
+}
+
+.nice-font {
+  line-height: 32px;
+  font-size: 32px;
+  color: black;
+  weight: 700;
+}
+
+.clear-completed,
+html .clear-completed:active {
+	float: right;
+	position: relative;
+	line-height: 20px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.clear-completed:hover {
+	text-decoration: underline;
+}
