@@ -6,6 +6,11 @@ import {TodoDataService} from './todo-data.service.ts';
 @Component({
   selector: 'scarecrow-todolist',
   template: `
+  <section class="todoapp">
+    <header class="header">
+      <h1>Todos</h1>
+      <!--<input class="new-todo" placeholder="What needs to be done?" autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">-->
+    </header>
     <section class="main" *ngIf="todos.length > 0">
       <ul class="todo-list">
         <li *ngFor="let todo of todos" [class.completed]="todo.complete" [class.editing]="todo.editing">
@@ -18,6 +23,12 @@ import {TodoDataService} from './todo-data.service.ts';
         </li>
       </ul>
     </section>
+    <footer class="footer" *ngIf="todos.length > 0">
+      <span class="todo-count"><strong>{{todos.length}}</strong> {{todos.length == 1 ? 'item' : 'items'}} left</span>
+      <button class="clear-completed" *ngIf="getCompleteCount() > 0" (click)="removeComplete()">Clear completed</button>
+    </footer>
+  </section>
+
   `,
   providers: [TodoDataService]
 })
@@ -28,7 +39,7 @@ export class TodoList {
   subscription: any;
   ngZone: any;
 
-  constructor(@Inject(NgZone) ngZone:NgZone) {
+  constructor(@Inject(NgZone) ngZone:NgZone, private todoDataService: TodoDataService) {
     this.showFramework = false;
     this.ngZone = ngZone;
   }
@@ -40,9 +51,64 @@ export class TodoList {
         this.showFramework = showFramework;
       });
     });
+
+    window.addEventListener('clearcompleted', function(e) {
+      console.log(e);
+    });
   }
 
   ngOnDestroy() {
     this.subscription.dispose();
   }
+
+
+  newTodo: Todo = new Todo();
+
+  addTodo() {
+    this.todoDataService.addTodo(this.newTodo);
+    this.newTodo = new Todo();
+  }
+
+  toggleTodoComplete(todo) {
+    this.todoDataService.toggleTodoComplete(todo);
+  }
+
+  getCompleteCount() {
+    return this.todoDataService.getComplete().length;
+  }
+
+  removeTodo(todo) {
+    this.todoDataService.deleteTodoById(todo.id);
+  }
+
+  removeComplete() {
+    this.todoDataService.removeComplete();
+  }
+
+	stopEditing(todo: Todo, editedTitle: string) {
+		todo.title = editedTitle;
+		todo.editing = false;
+    this.todoDataService.updateTodoById(todo.id, todo);
+	}
+
+	cancelEditingTodo(todo: Todo) {
+		todo.editing = false;
+	}
+
+	updateEditingTodo(todo: Todo, editedTitle: string) {
+		editedTitle = editedTitle.trim();
+		todo.editing = false;
+
+		if (editedTitle.length === 0) {
+			return this.todoDataService.remove(todo);
+		}
+
+		todo.title = editedTitle;
+    this.todoDataService.updateTodoById(todo.id, todo);
+	}
+
+	editTodo(todo: Todo) {
+		todo.editing = true;
+	}
+
 }
