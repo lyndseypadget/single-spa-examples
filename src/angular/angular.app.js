@@ -8,7 +8,7 @@ const ngLifecycles = singleSpaAngular({
   domElementGetter,
   mainModule,
   angularPlatform: platformBrowserDynamic(),
-  template: `<example-ng2-app />`,
+  template: `<scarecrow-todolist />`,
 })
 
 export const bootstrap = [
