@@ -7,12 +7,7 @@ export default {
   props: ['clearcompleted-todos'],
   methods: {
     clearcompleted: function () {
-      console.log('calling clearcompleted in lion/vue');
-      let modifiedTodos = this.clearcompletedTodos.filter(function (todo) {
-        return !todo.completed;
-      });
-      // this.$emit('new-todos', modifiedTodos)
-      console.log('I am sending the message from Lion (Vue)!');
+      console.log('I am sending the clearcompleted message from Lion (Vue)!');
       window.dispatchEvent(new CustomEvent('clearcompleted'));
     }
   }

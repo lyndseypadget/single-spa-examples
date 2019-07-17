@@ -32,6 +32,7 @@ export class TodoDataService {
 
   // Simulate DELETE /todos/:id
   deleteTodoById(id: number): TodoDataService {
+    id = Number(id); // just in case
     this.todos = this.todos
       .filter(todo => todo.id !== id);
   	this.updateStore();

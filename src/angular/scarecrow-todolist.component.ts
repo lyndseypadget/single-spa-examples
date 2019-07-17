@@ -14,10 +14,10 @@ import {TodoDataService} from './todo-data.service.ts';
     <section class="main" *ngIf="todos.length > 0">
       <ul class="todo-list">
         <li *ngFor="let todo of todos" [class.completed]="todo.complete" [class.editing]="todo.editing">
-          <div class="view">
+          <div class="view" id="{{todo.id}}">
             <input class="toggle" type="checkbox" (click)="toggleTodoComplete(todo)" [checked]="todo.complete">
             <label (dblclick)="editTodo(todo)">{{todo.title}}</label>
-            <button class="destroy" (click)="removeTodo(todo)"></button>
+            <div id="lion-removetodo"></div>
           </div>
           <input class="edit" *ngIf="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(todo, editedtodo.value)" (keyup.enter)="updateEditingTodo(todo, editedtodo.value)" (keyup.escape)="cancelEditingTodo(todo)">
         </li>
@@ -59,13 +59,19 @@ export class TodoList {
     });
 
     window.addEventListener('clearcompleted', function(e) {
-      console.log('I received the message in Scarecrow (Angular)!');
+      console.log('I received the clearcompleted message in Scarecrow (Angular)!');
       this.removeComplete();
       this.refreshView();
     }.bind(this), false);
 
     // we can't do this, we have to bind
     // window.addEventListener('clearcompleted', this.removeComplete);
+
+    window.addEventListener('removetodo', function(e) {
+      console.log('I received the removetodo message in Scarecrow (Angular)!');
+      this.removeTodoById(e.detail.id);
+      this.refreshView();
+    }.bind(this), false);
   }
 
   ngOnDestroy() {
@@ -88,13 +94,15 @@ export class TodoList {
     return this.todoDataService.getComplete().length;
   }
 
-  removeTodo(todo) {
-    this.todoDataService.deleteTodoById(todo.id);
+  removeTodo(todo:Todo) {
+    this.removeTodoById(todo.id);
+  }
+
+  removeTodoById(id:number) {
+    this.todoDataService.deleteTodoById(id);
 
     //forcibly update
     this.todos = this.todoDataService.getAllTodos();
-
-    // this.refreshView();
   }
 
   removeComplete() {
