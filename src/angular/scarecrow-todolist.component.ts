@@ -25,7 +25,6 @@ import {TodoDataService} from './todo-data.service.ts';
     </section>
     <footer class="footer" *ngIf="todos.length > 0">
       <span class="todo-count"><strong>{{todos.length}}</strong> {{todos.length == 1 ? 'item' : 'items'}} left</span>
-      <button class="clear-completed" *ngIf="getCompleteCount() > 0" (click)="removeComplete()">Clear completed</button>
     </footer>
   </section>
 
@@ -35,13 +34,23 @@ import {TodoDataService} from './todo-data.service.ts';
 export class TodoList {
   public border:String;
   public showFramework:Boolean;
-  public todos = [new Todo({title:'task1',completed:false,editing:false})];
+  public todos = [];
   subscription: any;
   ngZone: any;
+  private defaultTask = new Todo({title:'task1',completed:false,editing:false});
 
   constructor(@Inject(NgZone) ngZone:NgZone, private todoDataService: TodoDataService) {
     this.showFramework = false;
     this.ngZone = ngZone;
+
+    //FIXME: we shouldn't have to do this but for some reason the provider injection isn't working
+    this.todoDataService = new TodoDataService();
+
+    this.todos = this.todoDataService.getAllTodos();
+    if(!this.todos.length) {
+      this.todoDataService.addTodo(this.defaultTask);
+    }
+    // console.log('CONSTRUCTOR', this.todoDataService);
   }
 
   ngOnInit() {
@@ -53,8 +62,12 @@ export class TodoList {
     });
 
     window.addEventListener('clearcompleted', function(e) {
-      console.log(e);
-    });
+      console.log('I received the message in Scarecrow (Angular)!');
+      this.removeComplete();
+    }.bind(this), false);
+
+    // we can't do this, we have to bind
+    // window.addEventListener('clearcompleted', this.removeComplete);
   }
 
   ngOnDestroy() {
@@ -82,7 +95,11 @@ export class TodoList {
   }
 
   removeComplete() {
+    console.log('removing completed todos...');
     this.todoDataService.removeComplete();
+
+    //forcibly update
+    this.todos = this.todoDataService.getAllTodos();
   }
 
 	stopEditing(todo: Todo, editedTitle: string) {

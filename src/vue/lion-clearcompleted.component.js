@@ -12,7 +12,8 @@ export default {
         return !todo.completed;
       });
       // this.$emit('new-todos', modifiedTodos)
-      this.dispatchEvent(new CustomEvent('clearcompleted'));
+      console.log('I am sending the message from Lion (Vue)!');
+      window.dispatchEvent(new CustomEvent('clearcompleted'));
     }
   }
 };
