@@ -9,7 +9,7 @@ import {TodoDataService} from './todo-data.service.ts';
   <section class="todoapp">
     <header class="header">
       <h1>Todos</h1>
-      <!--<input class="new-todo" placeholder="What needs to be done?" autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">-->
+      <input class="new-todo" placeholder="What needs to be done?" autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">
     </header>
     <section class="main" *ngIf="todos.length > 0">
       <ul class="todo-list">
@@ -37,7 +37,6 @@ export class TodoList {
   public todos = [];
   subscription: any;
   ngZone: any;
-  private defaultTask = new Todo({title:'task1',completed:false,editing:false});
 
   constructor(@Inject(NgZone) ngZone:NgZone, private todoDataService: TodoDataService) {
     this.showFramework = false;
@@ -47,9 +46,7 @@ export class TodoList {
     this.todoDataService = new TodoDataService();
 
     this.todos = this.todoDataService.getAllTodos();
-    if(!this.todos.length) {
-      this.todoDataService.addTodo(this.defaultTask);
-    }
+
     // console.log('CONSTRUCTOR', this.todoDataService);
   }
 
@@ -93,6 +90,11 @@ export class TodoList {
 
   removeTodo(todo) {
     this.todoDataService.deleteTodoById(todo.id);
+
+    //forcibly update
+    this.todos = this.todoDataService.getAllTodos();
+
+    // this.refreshView();
   }
 
   removeComplete() {

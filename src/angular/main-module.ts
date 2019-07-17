@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {TodoList} from './scarecrow-todolist.component.ts';
 import {enableProdMode} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 try {
     enableProdMode();
@@ -10,7 +11,7 @@ try {
 }
 
 @NgModule({
-    imports: [BrowserModule],
+    imports: [BrowserModule, FormsModule],
     declarations: [TodoList],
     bootstrap: [TodoList]
 })
