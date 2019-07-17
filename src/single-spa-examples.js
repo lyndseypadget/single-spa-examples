@@ -2,8 +2,8 @@ import {declareChildApplication, start} from 'single-spa';
 import {loadEmberApp} from 'single-spa-ember';
 import 'babel-polyfill';
 
-declareChildApplication('navbar', () => import('./navbar/navbar.app.js'), () => true);
-declareChildApplication('home', () => import('./home/home.app.js'), () => location.pathname === "" || location.pathname === "/");
+// declareChildApplication('navbar', () => import('./navbar/navbar.app.js'), () => true);
+// declareChildApplication('home', () => import('./home/home.app.js'), () => location.pathname === "" || location.pathname === "/");
 
 // declareChildApplication('angularjs', () => import('./angularjs/angularjs.app.js'), pathPrefix('/angularjs'));
 // declareChildApplication('react', () => import('./react/react.app.js'), pathPrefix('/react'));

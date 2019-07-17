@@ -64,6 +64,7 @@ export class TodoList {
     window.addEventListener('clearcompleted', function(e) {
       console.log('I received the message in Scarecrow (Angular)!');
       this.removeComplete();
+      this.refreshView();
     }.bind(this), false);
 
     // we can't do this, we have to bind
@@ -100,6 +101,10 @@ export class TodoList {
 
     //forcibly update
     this.todos = this.todoDataService.getAllTodos();
+  }
+
+  refreshView() {
+    this.ngZone.run(() => {});
   }
 
 	stopEditing(todo: Todo, editedTitle: string) {
