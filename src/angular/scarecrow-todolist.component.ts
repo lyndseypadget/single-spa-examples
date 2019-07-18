@@ -17,7 +17,7 @@ import {TodoDataService} from './todo-data.service.ts';
           <div class="view" id="{{todo.id}}">
             <input class="toggle" type="checkbox" (click)="toggleTodoComplete(todo)" [checked]="todo.complete">
             <label (dblclick)="editTodo(todo)">{{todo.title}}</label>
-            <div id="lion-removetodo"></div>
+            <div class="lion-removetodo"></div>
           </div>
           <input class="edit" *ngIf="todo.editing" [value]="todo.title" #editedtodo (blur)="stopEditing(todo, editedtodo.value)" (keyup.enter)="updateEditingTodo(todo, editedtodo.value)" (keyup.escape)="cancelEditingTodo(todo)">
         </li>

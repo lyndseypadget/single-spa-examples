@@ -24,37 +24,50 @@ const vueLifecycles = singleSpaVue({
   }
 });
 
+let els = document.getElementsByClassName('lion-removetodo');
+let removeTodoVueLifecycles = [];
+for(var i = 0; i < els.length; i++) {
+  var el = els.item(i);
 
-const vueLifecycles2 = singleSpaVue({
-  Vue,
-  appOptions: {
-    el: '#lion-removetodo',
-    template: `
-      <lion-removetodo></lion-removetodo>
-    `,
-    components: {
-      'lion-removetodo': RemoveTodo,
-    },
-    data: {
-    },
-    beforeMount: function() {
-    },
-    beforeDestroy: function() {
+  let spa = singleSpaVue({
+    Vue,
+    appOptions: {
+      el: el,
+      template: `
+        <lion-removetodo v-bind:removetodo_idx="i"></lion-removetodo>
+      `,
+      components: {
+        'lion-removetodo': RemoveTodo,
+      },
+      data: {
+        i: el.closest('.view').getAttribute('id')
+      },
+      beforeMount: function() {
+      },
+      beforeDestroy: function() {
+      }
     }
-  }
-});
+  });
+  removeTodoVueLifecycles.push(spa);
+}
 
 export const bootstrap = [
   vueLifecycles.bootstrap,
-  vueLifecycles2.bootstrap,
 ];
+removeTodoVueLifecycles.forEach((lc) => {
+  bootstrap.push(lc.bootstrap);
+})
 
 export const mount = [
   vueLifecycles.mount,
-  vueLifecycles2.mount,
 ];
+removeTodoVueLifecycles.forEach((lc) => {
+  bootstrap.push(lc.mount);
+})
 
 export const unmount = [
   vueLifecycles.unmount,
-  vueLifecycles2.unmount,
 ];
+removeTodoVueLifecycles.forEach((lc) => {
+  bootstrap.push(lc.unmount);
+})
